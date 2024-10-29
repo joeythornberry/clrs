@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "raylib.h"
 
 typedef struct GraphEdge {
 	int end;
@@ -79,6 +78,31 @@ GraphNode * parseGraphNode(const char * input, const int node_count) {
 	return output;
 }
 
+void outputEdge(FILE * f, int x1, int y1, int x2, int y2) {
+	fprintf(f, "e(%d, %d, %d, %d);\n", x1, y1, x2, y2);
+}
+
+void outputNode(FILE * f, int i, int x, int y) {
+	fprintf(f, "n(%d, %d, %d);\n", i, x, y);
+}
+
+void outputGraph(int node_count, GraphNode * graph[]) {
+	FILE * f = fopen("graph.js", "w");
+
+	for (int i = 0; i < node_count; i++) {
+		if (!graph[i]->edges) continue;
+		GraphEdge * head = graph[i]->edges;
+		while (head) {
+			outputEdge(f, graph[i]->x, graph[i]->y, graph[head->end]->x, graph[head->end]->y);
+			head = head->next;
+		}
+	}
+
+	for (int i = 0; i < node_count; i++) {
+		outputNode(f, i, graph[i]->x, graph[i]->y);
+	}
+}
+
 int main(int argc, const char * argv[]) {
 
 	srand(time(NULL));
@@ -94,5 +118,8 @@ int main(int argc, const char * argv[]) {
 		graph[i]->y = rand() % 50;
 		printGraphNode(graph[i]);
 	}
+
+	outputGraph(node_count, graph);
+
 	return 0;
 }
