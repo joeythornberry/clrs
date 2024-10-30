@@ -9,8 +9,8 @@ void outputNode(FILE * f, int i, int x, int y) {
 	fprintf(f, "n(%d, %d, %d);\n", i, x, y);
 }
 
-void outputGraph(int node_count, GraphNode * graph[]) {
-	FILE * f = fopen("graph.js", "w");
+void outputGraph(const char * filename, int node_count, GraphNode * graph[]) {
+	FILE * f = fopen(filename, "w");
 
 	for (int i = 0; i < node_count; i++) {
 		if (!graph[i]->edges) continue;

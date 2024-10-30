@@ -1,4 +1,4 @@
 #include "graph.h"
 #pragma once
 
-void outputGraph(int node_count, GraphNode * graph[]);
+void outputGraph(const char * filename, int node_count, GraphNode * graph[]);

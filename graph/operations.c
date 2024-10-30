@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <math.h>
 #include <stdio.h>
 
 typedef struct Point {
@@ -11,7 +12,14 @@ int eq(float a, float b) {
 }
 
 float slope(Point p1, Point p2) {
+	if ( eq(p1.x, p2.x) ) {
+		return (p1.y - p2.y) / 0.01;
+	}
 	return (p1.y - p2.y) / (p1.x - p2.x);
+}
+
+float dist(Point p1, Point p2) {
+	return sqrtf((p1.x-p2.x)*(p1.x-p2.x) + (p1.y-p2.y)*(p1.y-p2.y));
 }
 
 int isOnLine(Point p, Point p1, Point p2) {

@@ -6,8 +6,8 @@
 #include "detangle.h"
 
 #define MIN_POS 10
-#define MAX_X 50
-#define MAX_Y 50
+#define MAX_X 20
+#define MAX_Y 20
 
 int main(int argc, const char * argv[]) {
 
