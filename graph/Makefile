@@ -1,2 +1,2 @@
-graph: graph.o
-	gcc -o graph graph.c
+graph: graph.o detangle.o operations.o main.o
+	gcc -ggdb *.c -o graph

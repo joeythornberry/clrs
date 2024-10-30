@@ -2,10 +2,10 @@
 <html lang="en-US">
   <head>
     <meta charset="UTF-8" />
-    <title>Canvas experiment</title>
+    <title>Graph</title>
   </head>
   <body>
-    <canvas id="canvas" width="1000" height="500"></canvas>
+    <canvas id="canvas" width="1000" height="1000"></canvas>
     <script type="application/javascript">
         var context; // var can be shared across scripts
 	const canvas = document.getElementById("canvas");
@@ -13,8 +13,8 @@
         context = canvas.getContext("2d");
 
 	const NODE_SIZE = 30;
-	const X_MULTIPLIER = 5;
-	const Y_MULTIPLIER = 5;
+	const X_MULTIPLIER = 8;
+	const Y_MULTIPLIER = 8;
 	const NODE_COLOR = "rgb(0 255 0)";
 	const NODE_TEXT_COLOR = "rgb(0 0 0)";
 

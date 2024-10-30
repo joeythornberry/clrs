@@ -1,0 +1,39 @@
+void moveNodeTowards(GraphNode * g, int x, int y) {
+	int dx = x - g->x;
+	int dy = y - g->y;
+
+	if (x > g->x + MIN_POS) {
+		g->x++;
+	} else if (g->y > x + MIN_POS) {
+		g->x--;
+	}
+
+	if (y > g->y + MIN_POS) {
+		g->y++;
+	} else if (g->y > y + MIN_POS) {
+		g->y--;
+	}
+}
+	
+int posOrNeg(int input) {
+	if (input > 0) return 1;
+	else if (input < 0) return -1;
+	else return rand() % 2 - 1;
+}
+
+void moveNodeAwayIfClose(GraphNode * g, int x, int y) {
+	if (abs(g->x - x) < MIN_POS) g->x += posOrNeg(g->x - x);
+	//if (abs(g->y - y) < MIN_POS) g->y += posOrNeg(g->y - y);
+}
+
+void coerceInBounds(GraphNode * g) {
+	if (g->x < MIN_POS) g->x = MIN_POS;
+	if (g->y < MIN_POS) g->y = MIN_POS;
+	if (g->y > MAX_Y) g->y = MAX_Y;
+	if (g->x > MAX_X) g->x = MAX_X;
+}
+
+typedef struct Midpoint {
+	int x;
+	int y;
+} Midpoint;
