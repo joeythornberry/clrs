@@ -20,33 +20,40 @@
 
 	const FONT_SIZE = 10;
 
-	function getCenter(x,y) {
-		const cx = x*X_MULTIPLIER + NODE_SIZE/2;
-		const cy = y*Y_MULTIPLIER + NODE_SIZE/2;
+	function getBigCoords(x,y) {
+		const cx = x*X_MULTIPLIER;
+		const cy = y*Y_MULTIPLIER;
 		return { x: cx, y: cy };
+	}
+
+	function getBigCoordsForRect(x,y) {
+		const c = getBigCoords(x,y);
+		return {x: c.x - NODE_SIZE/2, y: c.y - NODE_SIZE/2};
 	}
 
 	function drawEdge(ctx,x1,y1,x2,y2) {
 		ctx.strokeStyle = EDGE_COLOR;
 		ctx.beginPath();
-		const c1 = getCenter(x1,y1);
+		const c1 = getBigCoords(x1,y1);
 		ctx.moveTo(c1.x,c1.y);
-		const c2 = getCenter(x2,y2);
+		const c2 = getBigCoords(x2,y2);
 		ctx.lineTo(c2.x,c2.y);
 		ctx.lineWidth = EDGE_WIDTH;
 		ctx.stroke();
 	}
 
 	function drawNode(ctx,i,x,y) {
+		const c = getBigCoordsForRect(x,y);
 		ctx.fillStyle = NODE_COLOR;
-		ctx.fillRect(x*X_MULTIPLIER,y*Y_MULTIPLIER,NODE_SIZE,NODE_SIZE);
+		ctx.fillRect(c.x,c.y,NODE_SIZE,NODE_SIZE);
 
-		const c = getCenter(x,y);
+		const tc = getBigCoords(x,y);
+
 		ctx.fillStyle = NODE_TEXT_COLOR;
-		ctx.fillText(i, c.x - FONT_SIZE / 3, c.y + FONT_SIZE / 2, y);
+		ctx.fillText(i, tc.x - FONT_SIZE / 3, tc.y + FONT_SIZE / 2, y);
 	}
 
-        var before_context; // var can be shared across scripts
+        var before_context;
 	const before = document.getElementById("before");
         if (!before.getContext) console.error("No canvas API");
         before_context = before.getContext("2d");
@@ -63,7 +70,7 @@
     </script>
     <script type="application/javascript" src="graphbefore.js"></script>
     <script type="application/javascript">
-        var after_context; // var can be shared across scripts
+        var after_context;
 	const after = document.getElementById("after");
         if (!after.getContext) console.error("No canvas API");
         after_context = after.getContext("2d");
