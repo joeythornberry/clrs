@@ -6,8 +6,8 @@
 #include "detangle.h"
 
 #define MIN_POS 10
-#define MAX_X 100
-#define MAX_Y 100
+#define MAX_X 50
+#define MAX_Y 50
 
 int main(int argc, const char * argv[]) {
 
@@ -26,6 +26,8 @@ int main(int argc, const char * argv[]) {
 		printGraphNode(i, graph[i]);
 	}
 
+	outputGraph("graphbefore.js", node_count, graph);
+
 	printf("DETANGLING...\n");
 	detangleGraph(node_count, graph);
 
@@ -33,7 +35,7 @@ int main(int argc, const char * argv[]) {
 		printGraphNode(i, graph[i]);
 	}
 
-	outputGraph(node_count, graph);
+	outputGraph("graph.js", node_count, graph);
 
 	return 0;
 

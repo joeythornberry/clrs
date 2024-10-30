@@ -5,12 +5,9 @@
     <title>Graph</title>
   </head>
   <body>
-    <canvas id="canvas" width="1000" height="1000"></canvas>
+    <canvas id="before" width="1000" height="450" style="border: 1px solid red"></canvas>
+    <canvas id="after" width="1000" height="450" style="border: 1px solid blue;"></canvas>
     <script type="application/javascript">
-        var context; // var can be shared across scripts
-	const canvas = document.getElementById("canvas");
-        if (!canvas.getContext) console.error("No canvas API");
-        context = canvas.getContext("2d");
 
 	const NODE_SIZE = 30;
 	const X_MULTIPLIER = 8;
@@ -22,7 +19,6 @@
 	const EDGE_WIDTH = 2;
 
 	const FONT_SIZE = 10;
-	context.font = `${FONT_SIZE}px monospace`;
 
 	function getCenter(x,y) {
 		const cx = x*X_MULTIPLIER + NODE_SIZE/2;
@@ -30,29 +26,56 @@
 		return { x: cx, y: cy };
 	}
 
-	function e(x1,y1,x2,y2) {
-		context.strokeStyle = EDGE_COLOR;
-		context.beginPath();
+	function drawEdge(ctx,x1,y1,x2,y2) {
+		ctx.strokeStyle = EDGE_COLOR;
+		ctx.beginPath();
 		const c1 = getCenter(x1,y1);
-		context.moveTo(c1.x,c1.y);
+		ctx.moveTo(c1.x,c1.y);
 		const c2 = getCenter(x2,y2);
-		context.lineTo(c2.x,c2.y);
-		context.lineWidth = EDGE_WIDTH;
-		context.stroke();
+		ctx.lineTo(c2.x,c2.y);
+		ctx.lineWidth = EDGE_WIDTH;
+		ctx.stroke();
 	}
 
-	function n(i,x,y) {
-		context.fillStyle = NODE_COLOR;
-		context.fillRect(x*X_MULTIPLIER,y*Y_MULTIPLIER,NODE_SIZE,NODE_SIZE);
+	function drawNode(ctx,i,x,y) {
+		ctx.fillStyle = NODE_COLOR;
+		ctx.fillRect(x*X_MULTIPLIER,y*Y_MULTIPLIER,NODE_SIZE,NODE_SIZE);
 
 		const c = getCenter(x,y);
-		context.fillStyle = NODE_TEXT_COLOR;
-		context.fillText(i, c.x - FONT_SIZE / 3, c.y + FONT_SIZE / 2, y);
+		ctx.fillStyle = NODE_TEXT_COLOR;
+		ctx.fillText(i, c.x - FONT_SIZE / 3, c.y + FONT_SIZE / 2, y);
 	}
+
+        var before_context; // var can be shared across scripts
+	const before = document.getElementById("before");
+        if (!before.getContext) console.error("No canvas API");
+        before_context = before.getContext("2d");
+	before_context.font = `${FONT_SIZE}px monospace`;
+
+	var e = function(x1,y1,x2,y2) {
+		drawEdge(before_context,x1,y1,x2,y2);
+	}
+
+	var n = function(i,x,y) {
+		drawNode(before_context,i,x,y);
+	}
+
     </script>
+    <script type="application/javascript" src="graphbefore.js"></script>
     <script type="application/javascript">
-            //context.fillStyle = "rgb(200 0 0)";
-	    //context.fillRect(20,20,RECT_SIZE,RECT_SIZE);
+        var after_context; // var can be shared across scripts
+	const after = document.getElementById("after");
+        if (!after.getContext) console.error("No canvas API");
+        after_context = after.getContext("2d");
+	after_context.font = `${FONT_SIZE}px monospace`;
+
+	e = function(x1,y1,x2,y2) {
+		drawEdge(after_context,x1,y1,x2,y2);
+	}
+
+	n = function(i,x,y) {
+		drawNode(after_context,i,x,y);
+	}
     </script>
     <script type="application/javascript" src="graph.js"></script>
   </body>
