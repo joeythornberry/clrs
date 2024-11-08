@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <title>Graph</title>
   </head>
-  <body>
+  <body style="background-color: black;">
     <canvas id="before" width="400" height="400" style="border: 1px solid red"></canvas>
     <canvas id="after" width="400" height="400" style="border: 1px solid blue;"></canvas>
     <script type="application/javascript">
@@ -15,7 +15,7 @@
 	const NODE_COLOR = "rgb(0 255 0)";
 	const NODE_TEXT_COLOR = "rgb(0 0 0)";
 
-	const EDGE_COLOR = "rgb(0 0 0);"
+	const EDGE_COLOR = "rgb(0 0 0)"
 	const EDGE_WIDTH = 2;
 
 	const FONT_SIZE = 10;
@@ -32,11 +32,14 @@
 	}
 
 	function drawEdge(ctx,x1,y1,x2,y2) {
-		ctx.strokeStyle = EDGE_COLOR;
-		ctx.beginPath();
 		const c1 = getBigCoords(x1,y1);
-		ctx.moveTo(c1.x,c1.y);
 		const c2 = getBigCoords(x2,y2);
+		const grad = ctx.createLinearGradient(c1.x,c1.y,c2.x,c2.y);
+		grad.addColorStop(0, EDGE_COLOR);
+		grad.addColorStop(1, NODE_COLOR);
+		ctx.strokeStyle = grad;
+		ctx.beginPath();
+		ctx.moveTo(c1.x,c1.y);
 		ctx.lineTo(c2.x,c2.y);
 		ctx.lineWidth = EDGE_WIDTH;
 		ctx.stroke();

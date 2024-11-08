@@ -1,6 +1,5 @@
 #include <assert.h>
 #include <math.h>
-#include <stdio.h>
 
 typedef struct Point {
 	float x;
