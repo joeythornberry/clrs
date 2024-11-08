@@ -2,7 +2,6 @@
 #include "operations.h"
 #include "graph.h"
 #include <math.h>
-#include <stdio.h>
 
 void moveTowards(GraphNode * n, Point end, float distance) {
 	float m = slope(n->p, end);
@@ -12,8 +11,6 @@ void moveTowards(GraphNode * n, Point end, float distance) {
 	n->p.y += m * direction * distance/ norm;
 	float dx = direction * distance / norm;
 	float dy = m * direction * distance / norm;
-	//if (dy / dx > 1 || dy / dx < -1) printf("GT %2.2f\n", dy / dx);
-	//else printf("LE %2.2f\n", dy / dx);
 }
 
 void detangleTwoNodes(GraphNode * graph[], int i1, int i2) {
@@ -92,45 +89,27 @@ Point calculateInflationFactors(int node_count, GraphNode * graph[], int max_x, 
 	return inflation_factors;
 }
 
-void inflateGraph(int node_count, GraphNode * graph[], Point inflation_factors) {
-	for (int i = 0; i < node_count; i++) {	
-		graph[i]->p.x *= inflation_factors.x;
-		graph[i]->p.y *= inflation_factors.y;
-	}
-}
-
-int hasCloseNeighbor(int i, int node_count, GraphNode * graph[], float cutoff) {
-	for (int j = 0; j < node_count; j++) {
-		if (j == i) continue;
-	}
-	return 1;
-}
-
 void loosenGraph(int node_count, GraphNode * graph[], float cutoff) {
 	for (int i = 0; i < node_count; i++) {
 		for (int j = 0; j < node_count; j++) {
 			if (i == j) continue;
 			float d = dist(graph[i]->p, graph[j]->p);
-			if (d <= cutoff) {
-				printf("backing up %2.2f\n", -(cutoff-d));
+			if (d < cutoff) {
 				moveTowards(graph[i], graph[j]->p, -(cutoff-d));
 			}
 		}
 	}
 }
 
-void tightenGraph(int node_count, GraphNode * graph[], float cutoff, int direction) {
-	printf("tightening...\n");
+void tightenGraph(int node_count, GraphNode * graph[], float cutoff) {
 	for (int i = 0; i < node_count; i++) {
 		if (!graph[i]->edges) return;
 		GraphEdge * h = graph[i]->edges;
 		while (h) {
 			if (h->end == i) goto next;
 			float d = dist(graph[i]->p, graph[h->end]->p);
-			if (d > cutoff && direction > 0) {
+			if (d > cutoff) {
 				moveTowards(graph[i], graph[h->end]->p,  d-cutoff);
-			} else if (d < cutoff && direction < 0) {
-				moveTowards(graph[i], graph[h->end]->p, -cutoff);
 			}
 next:
 			h = h->next;
@@ -140,9 +119,8 @@ next:
 
 void detangleGraph(int node_count, GraphNode * graph[], int max_x, int max_y) {
 	for (int i = 0; i < 25; i++) {
-		printf("Detangling round %d...\n", i);
 		decrossGraph(node_count, graph);
-		tightenGraph(node_count, graph, 5, 1);
+		tightenGraph(node_count, graph, 5);
 		loosenGraph(node_count, graph, 3);
 	}
 	normalizeGraphPosition(node_count, graph, max_x, max_y);
